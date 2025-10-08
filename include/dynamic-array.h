@@ -4,17 +4,14 @@
 typedef enum{
     DA_NIL,                   //When there is no error
     DA_NULL_ARRAY,            //When arr is NULL
-    DA_ERROR_CODE_NOT_FOUND,  //When daGetError recieves a NULL DynamicArray
     DA_INVALID_PARAMS,        //When parameter values are not valid
-    DA_MEM_ALLOC_INC_FALIURE, //When memory coudnt increased
-    DA_MEM_ALLOC_DEC_FALIURE  //When memory coudnt be decreased
-    //TODO: add more error codes and fix the namming convention
+    DA_MEM_REALLOC_FALIURE,   //When memory coudnt be reallocated to a different size
 } daErrorCode;
 
 typedef struct DynamicArray DynamicArray;
 
 //Creates a new heap allocated DynamicArray, if element_size is 0 or capacity is 0 or heap allocation faliure it returns NULL
-DynamicArray* daCreate(const unsigned int element_size, const unsigned int capacity);
+DynamicArray* daCreate(const unsigned int capacity, const unsigned int element_size);
 
 //Frees the DynamicArray, if arr is NULL it does nothing
 void daDestroy(DynamicArray* arr);

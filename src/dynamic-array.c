@@ -10,9 +10,32 @@ struct DynamicArray{
     unsigned int capacity;     //Maximum number of elements that can be stored in underlying array
     daErrorCode error;         //Every func must update its value irrespective of whether err or not
 };
-//TODO: set proper error codes
+
 static daErrorCode daAdjustCapacity(DynamicArray* arr){
-    //TODO: complete this func
+    if(arr == NULL){
+        return DA_NULL_ARRAY;
+    }
+    if(arr->length >= arr->capacity){
+        void* tmp = realloc(arr->data, ((arr->capacity * 2) + 1) * arr->element_size);
+        if(tmp == NULL){
+            tmp = realloc(arr->data, (arr->capacity + 1) * arr->element_size);
+            if(tmp == NULL){
+                return DA_MEM_REALLOC_FALIURE;
+            }
+        }
+        arr->data = tmp;
+        arr->capacity = (arr->capacity * 2) + 1;
+        return DA_NIL;
+    }
+    if(arr->length < arr->capacity / 2){
+        void* tmp = realloc(arr->data, (arr->capacity / 2) * arr->element_size);
+        if(tmp == NULL){
+            return DA_MEM_REALLOC_FALIURE;
+        }
+        arr->data = tmp;
+        arr->capacity /= 2;
+        return DA_NIL;
+    }
     return DA_NIL;
 }
 
@@ -24,7 +47,7 @@ static daErrorCode daSetError(DynamicArray* arr, daErrorCode error){
     return DA_NIL;
 }
 
-DynamicArray* daCreate(const unsigned int element_size, const unsigned int capacity){
+DynamicArray* daCreate(const unsigned int capacity, const unsigned int element_size){
     if(element_size == 0 || capacity == 0){
         return NULL;
     }
@@ -137,7 +160,8 @@ void daPop(DynamicArray* arr, const unsigned int pos){
     arr->length--;
     daErrorCode err = daAdjustCapacity(arr);
     if(err != DA_NIL){
-        //TODO: return proper error in case reallocation fails
+        daSetError(arr, err);
+        return;
     }
     daSetError(arr, DA_NIL);
 }
@@ -194,12 +218,11 @@ daErrorCode daGetError(const DynamicArray* arr){
 }
 
 void daPrintError(const daErrorCode error){
-    //TODO: complete this func
-    switch(error){
+    switch (error){
         case DA_NIL:
-            printf("No error :)\n");
+            printf("No Error\n");
             break;
         default:
-            printf("TODO: complete this func!\n");
+            printf("IDK :(\n");
     }
 }

@@ -1,0 +1,3 @@
+Add more error codes in include/dynamic-array.h
+Set more descriptive error codes in src/dynamic-array.c
+Implement the daPrintError function in src/dynamic-array.c
